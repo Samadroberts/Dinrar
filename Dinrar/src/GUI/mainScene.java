@@ -4,7 +4,6 @@ import java.io.File;
 import GUI.Buttons.ButtonContainer;
 import GUI.FileTree.FileTreeItem;
 import GUI.Menu.MainMenuBar;
-import GUI.TArea.TArea;
 import javafx.scene.Scene;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
@@ -32,10 +31,8 @@ public class mainScene extends Scene {
 	private void setupMenu()
 	{
 		//Add menu Bar
-		TArea test = new TArea();
 		((VBox)this.getRoot()).getChildren().add(new MainMenuBar(primarystage));
 		((VBox)this.getRoot()).getChildren().add(new ButtonContainer(primarystage));
-		((VBox)this.getRoot()).getChildren().add(test);
 		
 		
 	}
