@@ -4,6 +4,7 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -17,7 +18,9 @@ public class TAreaImagePane extends GridPane {
 	public TAreaImagePane(Stage s)
 	{
 		super();
-		//this.prefWidthProperty().bind(s.widthProperty());
+		//Top,right,bottom,left
+		this.setPadding(new Insets(5,0,3,0));
+		this.prefWidthProperty().bind(s.widthProperty());
 		this.setAlignment(Pos.CENTER);
 		/*Temp picture*/
 		String imageUrl = "https://cdn1.lockerdome.com/uploads/b1cae0eb288f1bf12d72face89bb879ab36d1b14d824b08f7230b7b7309a4188_large";
