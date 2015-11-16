@@ -13,7 +13,7 @@ public class GUI extends Application implements Runnable {
 	public final static ThreadList Threadlist = new ThreadList();
 	
 	private final static String APPNAME = "Dinrar";
-	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please"};
+	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please","Winrar Winrar Chicken Dinrar"};
 	
 	public final static double DEFAULT_WIDTH = 900;
 	public final static double DEFAULT_HEIGHT = 700;
@@ -39,13 +39,6 @@ public class GUI extends Application implements Runnable {
 		primarystage.setScene(primaryscene);
 		primarystage.show();
 	}
-	/*
-	public static void main(String[] args)
-	{
-		launch(args);
-	}
-	*/
-	
 	public static Expander getExpander()
 	{
 		return E;

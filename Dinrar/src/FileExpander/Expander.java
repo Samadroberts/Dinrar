@@ -3,7 +3,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class Expander extends Thread {
+public class Expander {
 	HashMap<File,Integer> filemap;
 	
 	
@@ -27,11 +27,6 @@ public class Expander extends Thread {
 		printfiles();
 	}
 	
-	@Override
-	public void run()
-	{
-		/*Expand File*/
-	}
 	
 	/*For Testing*/
 	private void printfiles()

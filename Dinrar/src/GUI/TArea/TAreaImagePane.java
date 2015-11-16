@@ -24,11 +24,16 @@ public class TAreaImagePane extends GridPane {
 		String imageUrl = "https://cdn1.lockerdome.com/uploads/b1cae0eb288f1bf12d72face89bb879ab36d1b14d824b08f7230b7b7309a4188_large";
 		Image image = new Image(imageUrl);
 		ImageView imageView = new ImageView(image);
+		/*Set to same height as textboxes*/
+		imageView.setFitHeight(400);
+		
 		HBox hbox = new HBox(5);
 		hbox.getChildren().add(imageView);
+		
 		this.add(TAC.getTextAreas()[0], 0, 0);
 		this.add(hbox, 1, 0);
 		this.add(TAC.getTextAreas()[1], 2, 0);
+		
 		
 	}
 

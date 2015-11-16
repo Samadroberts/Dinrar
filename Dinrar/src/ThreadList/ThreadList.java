@@ -1,6 +1,4 @@
 package ThreadList;
-import FileExpander.Deflater;
-import FileExpander.Expander;
 import GUI.BinaryFiller;
 import javafx.scene.control.TextArea;
 
@@ -10,9 +8,7 @@ public class ThreadList {
 	
 	
 	private  BinaryFiller BinaryFillerThread;//pos 0
-	private Deflater DeflaterThread;//pos 1
-	private Expander ExpanderThread;//pos2
-	private  final Thread[] Threadlist = {BinaryFillerThread,DeflaterThread,ExpanderThread};
+	private  final Thread[] Threadlist = {BinaryFillerThread};
 	
 	
 	public Thread[] getthreadList()

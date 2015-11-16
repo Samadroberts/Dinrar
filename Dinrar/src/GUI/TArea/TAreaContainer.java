@@ -2,6 +2,8 @@ package GUI.TArea;
 
 import java.util.Random;
 
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 
@@ -20,8 +22,13 @@ public class TAreaContainer {
 		for(TextArea t:TextAreas)
 		{
 			/*Set Height and then bind TextAreas to edge of Screen*/
+			t.setMaxHeight(HEIGHT);
 			t.prefWidthProperty().bind(s.widthProperty());
 			t.setEditable(false);
+			t.maxWidthProperty().bind(s.widthProperty());
+			t.setPrefColumnCount(100);
+			t.setWrapText(true);
+			int i = 0;
 		}
 		
 	}
