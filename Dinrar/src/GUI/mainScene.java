@@ -1,12 +1,9 @@
 package GUI;
-import java.io.File;
 
 import GUI.Buttons.ButtonContainer;
-import GUI.FileTree.FileTreeItem;
 import GUI.Menu.MainMenuBar;
 import GUI.TArea.TAreaImagePane;
 import javafx.scene.Scene;
-import javafx.scene.control.TreeView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -35,8 +32,6 @@ public class mainScene extends Scene {
 		((VBox)this.getRoot()).getChildren().add(new MainMenuBar(primarystage));
 		((VBox)this.getRoot()).getChildren().add(new ButtonContainer(primarystage));
 		((VBox)this.getRoot()).getChildren().add((new TAreaImagePane(primarystage)));
-		
-		
 	}
 	
 }

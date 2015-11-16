@@ -44,8 +44,6 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 	public void handle(ActionEvent e) {
 		Object source = e.getSource();
 		FileChooser fileChooser = new FileChooser();
-		/*To be implemented*/
-		DirectoryChooser directorychooser = new DirectoryChooser();
 		
 		
 		if(source.equals(Expand))

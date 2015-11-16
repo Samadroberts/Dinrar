@@ -3,7 +3,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-public class Deflater {
+public class Deflater extends Thread {
 	HashMap<File,Integer> filemap;
 	
 	
@@ -26,6 +26,14 @@ public class Deflater {
 		/*For testing*/
 		printfiles();
 	}
+	
+	@Override
+	public void run()
+	{
+		/*Deflate File*/
+	}
+	
+	
 	/*For Testing*/
 	private void printfiles()
 	{

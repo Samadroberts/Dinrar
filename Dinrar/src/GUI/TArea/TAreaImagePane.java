@@ -1,12 +1,9 @@
 package GUI.TArea;
 
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -14,10 +11,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TAreaImagePane extends GridPane {
-	private static final TAreaContainer TAC = new TAreaContainer();
+	private static TAreaContainer TAC;
 	public TAreaImagePane(Stage s)
 	{
 		super();
+		TAC = new TAreaContainer(s);
 		//Top,right,bottom,left
 		this.setPadding(new Insets(5,0,3,0));
 		this.prefWidthProperty().bind(s.widthProperty());
@@ -31,6 +29,7 @@ public class TAreaImagePane extends GridPane {
 		this.add(TAC.getTextAreas()[0], 0, 0);
 		this.add(hbox, 1, 0);
 		this.add(TAC.getTextAreas()[1], 2, 0);
+		
 	}
 
 }

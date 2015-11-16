@@ -3,11 +3,14 @@ import java.util.Random;
 
 import FileExpander.Deflater;
 import FileExpander.Expander;
+import ThreadList.ThreadList;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class GUI extends Application {
+public class GUI extends Application implements Runnable {
+	
+	public final static ThreadList Threadlist = new ThreadList();
 	
 	private final static String APPNAME = "Dinrar";
 	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please"};
@@ -21,20 +24,27 @@ public class GUI extends Application {
 	private static Deflater D;
 	
 	@Override
-	public void start(Stage primarystage)
+	public void init()
 	{
 		E = new Expander();
 		D = new Deflater();
+	}
+	
+	@Override
+	public void start(Stage primarystage)
+	{
+
 		this.primaryscene = new mainScene(primarystage);
 		primarystage.setTitle(APPNAME + " : " + APPDESC[(new Random()).nextInt(APPDESC.length)]);
 		primarystage.setScene(primaryscene);
 		primarystage.show();
 	}
-	
+	/*
 	public static void main(String[] args)
 	{
 		launch(args);
 	}
+	*/
 	
 	public static Expander getExpander()
 	{
@@ -43,6 +53,11 @@ public class GUI extends Application {
 	public static Deflater getDeflater()
 	{
 		return D;
+	}
+
+	@Override
+	public void run() {
+		launch();
 	}
 	
 	
