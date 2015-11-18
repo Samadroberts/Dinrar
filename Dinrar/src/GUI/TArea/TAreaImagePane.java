@@ -2,12 +2,17 @@ package GUI.TArea;
 
 
 
+import GUI.BinaryFiller;
+import ThreadList.ThreadList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 public class TAreaImagePane extends GridPane {
@@ -25,14 +30,15 @@ public class TAreaImagePane extends GridPane {
 		Image image = new Image(imageUrl);
 		ImageView imageView = new ImageView(image);
 		/*Set to same height as textboxes*/
+		
 		imageView.setFitHeight(400);
-		
 		HBox hbox = new HBox(5);
-		hbox.getChildren().add(imageView);
-		
 		this.add(TAC.getTextAreas()[0], 0, 0);
+		hbox.getChildren().add(imageView);
 		this.add(hbox, 1, 0);
 		this.add(TAC.getTextAreas()[1], 2, 0);
+		BinaryFiller bf = new BinaryFiller(TAC.getTextAreas());
+		bf.start();
 		
 		
 	}

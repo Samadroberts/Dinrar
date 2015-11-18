@@ -5,7 +5,9 @@ import java.util.Random;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import GUI.GUI;
 
 public class TAreaContainer {
 	
@@ -23,16 +25,12 @@ public class TAreaContainer {
 		{
 			/*Set Height and then bind TextAreas to edge of Screen*/
 			t.setMaxHeight(HEIGHT);
-			t.prefWidthProperty().bind(s.widthProperty());
+			t.setPrefWidth(GUI.DEFAULT_WIDTH/3);
 			t.setEditable(false);
-			t.maxWidthProperty().bind(s.widthProperty());
-			t.setPrefColumnCount(100);
 			t.setWrapText(true);
-			int i = 0;
 		}
 		
 	}
-	
 	
 	public TextArea[] getTextAreas()
 	{

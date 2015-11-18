@@ -8,7 +8,7 @@ public class ThreadList {
 	
 	
 	private  BinaryFiller BinaryFillerThread;//pos 0
-	private  final Thread[] Threadlist = {BinaryFillerThread};
+	private  Thread[] Threadlist = {BinaryFillerThread};
 	
 	
 	public Thread[] getthreadList()

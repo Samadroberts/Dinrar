@@ -1,5 +1,7 @@
 package GUI;
 
+import java.util.Random;
+
 import javafx.scene.control.TextArea;
 
 public class BinaryFiller extends Thread {
@@ -18,16 +20,26 @@ public class BinaryFiller extends Thread {
 		boolean running = true;
 		while(running)
 		{
+			/*Select Either 1 or 0*/
+			Random ran = new Random();
+			int i = ran.nextInt(2);
 			for(TextArea t:ta)
 			{
-				t.appendText("123");
+				/*Append to Text Area*/
+				t.appendText(String.valueOf(i));
 			}
 			try{
-				sleep(500);
+				/*Check for kill signal*/
+				/*Slow down if resize happens because computer cannot keep up*/
+				sleep(125);
 			}catch(Exception e)
 			{
 				running = false;
 			}
+		}
+		try{
+		}catch(Exception e)
+		{
 			
 		}
 	}
