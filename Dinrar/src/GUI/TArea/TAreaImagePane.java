@@ -11,7 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 public class TAreaImagePane extends GridPane {
-	private static final String filename = "DW.jpg";
+	private static final String filename = "Images/DW.jpg";
 	private static Image i;
 	
 	

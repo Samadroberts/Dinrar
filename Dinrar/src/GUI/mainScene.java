@@ -8,7 +8,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
-
 public class mainScene extends Scene {
 	
 	private Stage primarystage;
@@ -21,7 +20,7 @@ public class mainScene extends Scene {
 		this(s,new VBox(),GUI.DEFAULT_WIDTH,GUI.DEFAULT_HEIGHT);
 		for(String file:Stylesheets)
 		{
-			this.getStylesheets().add(this.getClass().getResource(file).toExternalForm());
+			this.getStylesheets().add(this.getClass().getResource("CSS/"+file).toExternalForm());
 		}	
 	}
 	
