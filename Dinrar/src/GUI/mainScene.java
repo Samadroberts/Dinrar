@@ -12,11 +12,17 @@ import javafx.stage.Stage;
 public class mainScene extends Scene {
 	
 	private Stage primarystage;
+	private static final String[] Stylesheets = {"TextArea.css"};
+			
 	
 	
 	public mainScene(Stage s)
 	{
 		this(s,new VBox(),GUI.DEFAULT_WIDTH,GUI.DEFAULT_HEIGHT);
+		for(String file:Stylesheets)
+		{
+			this.getStylesheets().add(this.getClass().getResource(file).toExternalForm());
+		}	
 	}
 	
 	public mainScene(Stage s,VBox root,double width,double height)

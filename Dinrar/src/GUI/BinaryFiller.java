@@ -1,53 +1,38 @@
 package GUI;
 
-import java.util.Random;import javafx.scene.control.ScrollBar;
+import java.util.Random;
+
+import javafx.animation.AnimationTimer;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextArea;
 
-public class BinaryFiller extends Thread {
+public class BinaryFiller extends AnimationTimer{
 	
-	private double cur_width;
-	ScrollBar scrollBarv;
-
-	private TextArea[] ta;
-
+	private static TextArea[] ta;
 	public BinaryFiller(TextArea[] t)
 	{
-		this.ta = t;
-
+		ta = t;
 	}
 
-	@Override
-	public void run()
+	public void fillTextArea()
 	{
-		boolean running = true;
-		while(running)
+		/*Select Either 1 or 0*/
+		Random ran = new Random();
+
+		int i = ran.nextInt(2);
+		for(TextArea t:ta)
 		{
-			/*Select Either 1 or 0*/
-			Random ran = new Random();
-			int i = ran.nextInt(2);
-			
-			for(TextArea t:ta)
+			t.appendText(String.valueOf(i));
+			ScrollBar scrollBarv = (ScrollBar)t.lookup(".scroll-bar");
+			if(scrollBarv!=null)
 			{
-				t.appendText(String.valueOf(i));
-				cur_width = t.getWidth();
-			}
-			
-			try{
-				/*Check for kill signal*/
-				/*Slow down if resize happens because computer cannot keep up*/
-				if(cur_width>300)
-				{
-					sleep(125);
-				}
-				else
-				{
-					sleep(50);
-				}
-			}catch(Exception e)
-			{
-				running = false;
+				scrollBarv.setDisable(true);
 			}
 		}
 	}
 
+	@Override
+	public void handle(long now) {
+		fillTextArea();
+	}
 }

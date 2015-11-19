@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -14,9 +13,9 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 	
 	private final static Button Expand = new Button("Expand");
 	private final static Button Deflate = new Button("Deflate");
-	private final static Button Currupt = new Button("Currupt");
+	private final static Button Corrupt = new Button("Corrupt");
 	
-	private final static Button[] ButtonOptions = {Expand,Deflate,Currupt};
+	private final static Button[] ButtonOptions = {Expand,Deflate,Corrupt};
 	
 	public ButtonContainer(Stage s)
 	{
@@ -63,9 +62,9 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 			}catch(NullPointerException npe){};
 			
 		}
-		if(source.equals(Currupt))
+		if(source.equals(Corrupt))
 		{
-			fileChooser.setTitle("Open File to Currupt");
+			fileChooser.setTitle("Open File to Corrupt");
 			try
 			{
 				GUI.getDeflater().addFile(fileChooser.showOpenMultipleDialog(new Stage()));

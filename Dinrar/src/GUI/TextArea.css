@@ -1,0 +1,17 @@
+.Text-Area-Binary
+{
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-color: #fff, #fff;
+    
+    
+    
+}
+
+.Text-Area-Binary .scroll-bar:vertical:disabled {
+    -fx-opacity: 0;
+}
+
+.text-area .content {
+    -fx-cursor: DEFAULT ;
+}
