@@ -8,7 +8,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class GUI extends Application implements Runnable {
+public class GUI extends Application {
 	
 	public final static ThreadList Threadlist = new ThreadList();
 	
@@ -48,8 +48,7 @@ public class GUI extends Application implements Runnable {
 		return D;
 	}
 
-	@Override
-	public void run() {
+	public static void main(String[] args) {
 		launch();
 	}
 	

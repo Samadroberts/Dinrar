@@ -22,8 +22,8 @@ import javafx.stage.Stage;
 
 public class TAreaImagePane extends GridPane {
 	private static TAreaContainer TAC;
-	private static final File filename = new File("DW.jpg");
-	private static String path = (filename.getAbsolutePath().replace("\\", "/"));
+	private static final String filename = "DW.jpg";
+	private static Image i;
 	
 	
 	public TAreaImagePane(Stage s)
@@ -35,13 +35,12 @@ public class TAreaImagePane extends GridPane {
 		this.prefWidthProperty().bind(s.widthProperty());
 		this.setAlignment(Pos.CENTER);
 		
-		path = path.substring(0, path.length()-filename.getName().length());
-		path+="src/Images/" +filename.getName();
-		
-		ImageView imageView = new ImageView(new Image("file:///" + path));
+		i = new Image(this.getClass().getResource(filename).toExternalForm());
+		ImageView imageView = new ImageView(i);
 		/*Set to same height as textboxes*/
 		imageView.setFitHeight(400);
-		HBox hbox = new HBox(5);
+		
+		HBox hbox = new HBox(10);
 		this.add(TAC.getTextAreas()[0], 0, 0);
 		this.setStyle("-fx-focus-color: transparent;");
 		hbox.getChildren().add(imageView);
