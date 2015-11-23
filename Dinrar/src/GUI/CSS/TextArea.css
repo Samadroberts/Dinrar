@@ -2,16 +2,17 @@
 {
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-    -fx-background-color: #fff, #fff;
-    
-    
-    
+    -fx-highlight-fill: #00ff00;
+    -fx-highlight-text-fill: #000000;
+    -fx-text-fill: #00ff00;
 }
 
-.Text-Area-Binary .scroll-bar:vertical:disabled {
-    -fx-opacity: 0;
-}
-
-.text-area .content {
+.Text-Area-Binary .content{
     -fx-cursor: DEFAULT ;
+    -fx-background-color: #000000;
+}
+
+.Text-Area-Binary .scroll-pane{
+	-fx-vbar-policy:never;
+	-fx-hbar-policy:never;
 }

@@ -18,6 +18,8 @@ public class GUI extends Application {
 	
 	public final static double DEFAULT_WIDTH = 900;
 	public final static double DEFAULT_HEIGHT = 700;
+	/*For use on binary filler*/
+	public final static double DEFAULT_RES_COLUMN_COUNT = 122;
 	
 
 	

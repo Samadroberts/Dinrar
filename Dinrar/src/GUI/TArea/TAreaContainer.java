@@ -21,6 +21,7 @@ public class TAreaContainer {
 			t.setMaxHeight(HEIGHT);
 			t.setPrefWidth(GUI.DEFAULT_WIDTH/3);
 			t.prefWidthProperty().bind(s.widthProperty());
+			t.prefColumnCountProperty().bind(s.widthProperty());
 			/*Sets id to Text-Area-Binary in TextArea.css file*/
 			t.getStyleClass().add("Text-Area-Binary");
 			t.setEditable(false);
