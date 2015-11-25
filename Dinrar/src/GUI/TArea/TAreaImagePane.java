@@ -27,7 +27,6 @@ public class TAreaImagePane extends GridPane {
 		this.setPadding(new Insets(5,0,3,0));
 		this.prefWidthProperty().bind(s.widthProperty());
 		this.setAlignment(Pos.CENTER);
-		
 		i = new Image(this.getClass().getResource(filename).toExternalForm());
 		ImageView imageView = new ImageView(i);
 		/*Set to same height as textboxes*/

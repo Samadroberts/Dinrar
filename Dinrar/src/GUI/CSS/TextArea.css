@@ -16,3 +16,15 @@
 	-fx-vbar-policy:never;
 	-fx-hbar-policy:never;
 }
+
+.Text-Area-File-Display{
+	-fx-focus-color: transparent;
+	-fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-highlight-fill: #00ff00;
+    -fx-highlight-text-fill: #000000;
+    -fx-text-fill: #00ff00;
+}
+.Text-Area-File-Display .scroll-pane {
+	-fx-vbar-policy:never;
+}

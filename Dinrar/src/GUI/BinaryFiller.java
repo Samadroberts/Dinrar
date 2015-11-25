@@ -47,6 +47,7 @@ public class BinaryFiller extends AnimationTimer implements ChangeListener<Numbe
 		fillTextArea();
 	}
 
+	/*If user tries to scroll it it put back to the top of the textarea*/
 	@Override
 	public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
 		for(TextArea t:ta)

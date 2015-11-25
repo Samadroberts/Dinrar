@@ -1,6 +1,8 @@
 package GUI.Buttons;
 
+import FileExpander.Expander;
 import GUI.GUI;
+import GUI.ExpanderGUI.ExpanderGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -35,7 +37,6 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 		{
 			b.setPrefHeight(50);
 			b.setOnAction(this);
-			
 		}
 	}
 
@@ -47,11 +48,7 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 		
 		if(source.equals(Expand))
 		{
-			fileChooser.setTitle("Open File to Expand");
-			try
-			{
-				GUI.getExpander().addFile(fileChooser.showOpenMultipleDialog(new Stage()));
-			}catch(NullPointerException npe){};
+			new ExpanderGUI();
 		}
 		if(source.equals(Deflate))
 		{

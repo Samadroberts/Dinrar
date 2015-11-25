@@ -14,7 +14,8 @@ public class GUI extends Application {
 	public final static ThreadList Threadlist = new ThreadList();
 	
 	private final static String APPNAME = "Dinrar";
-	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please","Winrar Winrar Chicken Dinrar"};
+	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please",
+			"Winrar Winrar Chicken Dinrar","\""+"Nude Tayne"+"\""};
 	
 	public final static double DEFAULT_WIDTH = 900;
 	public final static double DEFAULT_HEIGHT = 700;
@@ -38,12 +39,9 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primarystage)
 	{
-
 		this.primaryscene = new mainScene(primarystage);
 		/*Initializes BinaryFiller AnimationTimer*/
 		this.initBinaryFiller();
-		//This start will be moved
-		bf.start();
 		primarystage.setTitle(APPNAME + " : " + APPDESC[(new Random()).nextInt(APPDESC.length)]);
 		primarystage.setScene(primaryscene);
 		primarystage.show();
@@ -71,6 +69,7 @@ public class GUI extends Application {
 	{
 		launch();
 	}
+	
 	
 	
 
