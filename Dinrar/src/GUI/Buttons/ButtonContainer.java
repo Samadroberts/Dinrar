@@ -48,16 +48,11 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 		
 		if(source.equals(Expand))
 		{
-			new ExpanderGUI();
+			new ExpanderGUI(GUI.getExpander());
 		}
 		if(source.equals(Deflate))
 		{
-			fileChooser.setTitle("Open File to Deflate");
-			try
-			{
-				GUI.getDeflater().addFile(fileChooser.showOpenMultipleDialog(new Stage()));
-			}catch(NullPointerException npe){};
-			
+			new ExpanderGUI(GUI.getDeflater());
 		}
 		if(source.equals(Corrupt))
 		{

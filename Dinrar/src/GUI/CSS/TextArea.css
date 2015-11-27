@@ -25,6 +25,7 @@
     -fx-highlight-text-fill: #000000;
     -fx-text-fill: #00ff00;
 }
+
 .Text-Area-File-Display .scroll-pane {
 	-fx-vbar-policy:never;
 }

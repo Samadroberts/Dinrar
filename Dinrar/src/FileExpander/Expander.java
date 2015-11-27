@@ -2,6 +2,7 @@ package FileExpander;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import GUI.GUI;
 
 public class Expander extends FileFunctions {
 	public Expander()
@@ -12,7 +13,13 @@ public class Expander extends FileFunctions {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
-		
+		GUI.getBinaryFiller().start();
+		for(File f:this.getFiles()){
+			System.out.println(f.getName());
+			this.setCur_file(f);
+			//DO Stuff
+		}
+		GUI.getBinaryFiller().stop();
+		return;
 	}
 }
