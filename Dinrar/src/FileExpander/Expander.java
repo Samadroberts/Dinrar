@@ -13,7 +13,7 @@ public class Expander extends FileFunctions {
 
 	@Override
 	public void run() {
-		GUI.getBinaryFiller().start();
+		GUI.getBinaryFiller();
 		for(File f:this.getFiles()){
 			System.out.println(f.getName());
 			this.setCur_file(f);

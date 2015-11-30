@@ -24,7 +24,7 @@ public class DeletedKeyListener implements EventHandler<KeyEvent> {
 		if(arg0.getCode()==KeyCode.DELETE)
 		{
 			e.remove_files(SelectedListener.getindexList());
-			expander.removeFiles(SelectedListener.getIndexs());
+			expander.removeFiles(SelectedListener.getfiles());
 		}
 	}
 
