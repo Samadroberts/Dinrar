@@ -10,6 +10,9 @@ import GUI.GUI;
 import sun.misc.IOUtils;
 
 public class Expander extends FileFunctions {
+	
+	private int bytes_written=0;
+	
 	public Expander()
 	{
 		super();
@@ -30,13 +33,18 @@ public class Expander extends FileFunctions {
 	@Override
 	public void modify_bytes(byte[] data) {
 		File f = this.getCur_file();
-		
-		try {
-			Files.write(Paths.get("test.dinrar"), data);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		this.write(f,data);
+	}
+
+	@Override
+	public void initwrite() {
+		File f = this.getCur_file();
+		byte filename[] = new byte[f.getName().length()+1];
+		for(int i = 0;i<f.getName().length();i++)
+		{
+			filename[i] = (byte)f.getName().charAt(i);
 		}
-		
+		filename[f.getName().length()] = (byte)'#';
+		write(f,filename);
 	}
 }

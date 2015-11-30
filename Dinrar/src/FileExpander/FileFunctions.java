@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +48,7 @@ public abstract class FileFunctions implements Runnable {
 	
 	
 	/*Get all the file info in an array of bytes*/
-	public byte[] getFileBytes()
+	public void getFileBytes()
 	{
 		RandomAccessFile filereader = null;
 		byte[] Fileinfo = null;
@@ -60,18 +62,33 @@ public abstract class FileFunctions implements Runnable {
 		}
 		Fileinfo = new byte[BYTES_TO_READ];
 		try {
+			filereader.read(Fileinfo);
+			{
+				initwrite();
+			}
 			while(filereader.read(Fileinfo)!=-1)
 			{
-				modify_bytes(Fileinfo);
+				write(this.getCur_file(),Fileinfo);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return Fileinfo;
+		System.out.println("Done");
 	}
 	
 	public abstract void modify_bytes(byte[] data);
+	public abstract void initwrite();
+	
+	public void write(File f,byte[] data)
+	{
+		try {
+			Files.write(Paths.get("test.dinrar"), data);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	
 	public File getCur_file() {
