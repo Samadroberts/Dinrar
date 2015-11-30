@@ -269,7 +269,15 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		{
 			return;
 		}
-		e.removeFiles(SelectedListener.getfiles());
+		ArrayList<File> toremove = new ArrayList<File>();
+		for(File f:e.getFiles())
+		{
+			if(!SelectedListener.getfiles().contains(f))
+			{
+				toremove.add(f);
+			}
+		}
+		e.removeFiles(toremove);
 		expanderStage.close();
 		e.run();
 	}
