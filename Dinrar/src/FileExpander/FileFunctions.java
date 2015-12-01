@@ -1,21 +1,21 @@
 package FileExpander;
 
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import GUI.GUI;
 
 public abstract class FileFunctions implements Runnable {
 	
 	private File cur_file;
+	private BigInteger cur_file_size;
 	HashMap<File,Integer> filemap;
 	private byte[] filedata;
 	
@@ -47,6 +47,10 @@ public abstract class FileFunctions implements Runnable {
 	}
 	
 	
+	public BigInteger getCur_file_size() {
+		return cur_file_size;
+	}
+
 	/*Get all the file info in an array of bytes*/
 	public void getFileBytes()
 	{
@@ -62,13 +66,13 @@ public abstract class FileFunctions implements Runnable {
 		}
 		Fileinfo = new byte[BYTES_TO_READ];
 		try {
-			filereader.read(Fileinfo);
 			{
+				cur_file_size = new BigInteger((String.valueOf(this.getCur_file().length())));
 				initwrite();
 			}
 			while(filereader.read(Fileinfo)!=-1)
 			{
-				write(this.getCur_file(),Fileinfo);
+				write(this.getCur_file(),Fileinfo,true);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -80,14 +84,23 @@ public abstract class FileFunctions implements Runnable {
 	public abstract void modify_bytes(byte[] data);
 	public abstract void initwrite();
 	
-	public void write(File f,byte[] data)
+	public int write(File f,byte[] data,boolean append)
 	{
-		try {
-			Files.write(Paths.get("test.dinrar"), data);
+		
+		try (FileOutputStream output = new FileOutputStream("test.dinrar", append)) {
+			DataOutputStream dos = new DataOutputStream(output);
+			dos.write(data);
+			System.out.println("Size: "+dos.size());
+			return dos.size();
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return 0;
 	}
 	
 	

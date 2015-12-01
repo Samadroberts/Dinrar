@@ -4,14 +4,12 @@ import java.util.Random;
 import FileExpander.Deflater;
 import FileExpander.Expander;
 import GUI.TArea.TAreaContainer;
-import ThreadList.ThreadList;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
 	
-	public final static ThreadList Threadlist = new ThreadList();
 	
 	private final static String APPNAME = "Dinrar";
 	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please",

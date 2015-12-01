@@ -33,7 +33,7 @@ public class Expander extends FileFunctions {
 	@Override
 	public void modify_bytes(byte[] data) {
 		File f = this.getCur_file();
-		this.write(f,data);
+		this.write(f,data,true);
 	}
 
 	@Override
@@ -45,6 +45,6 @@ public class Expander extends FileFunctions {
 			filename[i] = (byte)f.getName().charAt(i);
 		}
 		filename[f.getName().length()] = (byte)'#';
-		write(f,filename);
+		bytes_written+=write(f,filename,false);
 	}
 }

@@ -1,6 +1,7 @@
 package GUI.ExpanderGUI;
 
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableArrayBase;
@@ -10,7 +11,10 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
@@ -18,6 +22,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -52,10 +57,18 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 	private HBox lbHBox = new HBox();
 	private TitledPane filestp;
 	private ArrayList<String> filesListArray;
+	private boolean safemodeenabled = false;
+	private static final int DEFAULT_SAFE_MODE_LIMIT = 25; //GB
+	private int safemodelimit = DEFAULT_SAFE_MODE_LIMIT;
 	
+	private static final int DEFAULT_USER_DEFINED_LIMIT = 1;
+	private int userdefinedlimit = DEFAULT_USER_DEFINED_LIMIT;
+	private static final String DEFAULT_USER_DEFINED_LIMIT_STRING = "TB";
+	private String userdefinedlimitsize = DEFAULT_USER_DEFINED_LIMIT_STRING;
+
 	/*Size GUI items*/
 	private VBox sizeVBox;
-	private TextField sizeTField;
+	private NumberTextField sizeTField;
 	private GridPane expanderGPane;
 	private TitledPane sizetp;
 	private GridPane sizeGPane;
@@ -63,16 +76,17 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 	private RadioButton mbButton;
 	private RadioButton gbButton;
 	private RadioButton tbButton;
+	private RadioButton SelectedButton;
 	private Label sizeTOBIG;
-	
+
 	private GridPane expandBGPane;
 	private Button expandAll;
 	private Button expandSelected;
 	private Button Cancel;
-	
+
 	private boolean isExpander = false;
 	private boolean isDelfater = false;
-	
+
 	private ObservableList<String> filesList;
 
 	private static final ExpanderFocusListener focusListener = new ExpanderFocusListener();
@@ -119,15 +133,15 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			expanderGPane.setPadding(new Insets(10,0,0,0));
 			expanderGPane.setHgap(40);
 			mainVBox.getChildren().add(expanderGPane);
-			
+
 		}
 		mainVBox.setPadding(new Insets(10,10,10,10));
 	}
-	
+
 	private void initlbHBox()
 	{
 		lbHBox.prefWidthProperty().bind(expanderStage.widthProperty());
-		
+
 		initBrowseButton();
 		lbHBox.setPadding(new Insets(0,0,10,0));
 		lbHBox.getChildren().addAll(browseButton);
@@ -143,8 +157,8 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		//Add listener as this
 		browseButton.setOnAction(this);
 	}
-	
-	
+
+
 	private void initfilesListView()
 	{
 		filesListView = new ListView<String>();
@@ -162,7 +176,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		filestp.setMaxHeight(expanderStage.getHeight()*.5);
 		filestp.setCollapsible(false);
 	}
-	
+
 	private void initRadioButtons()
 	{
 		/*Add Buttons to ToggleGroup*/
@@ -173,6 +187,14 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		mbButton.setToggleGroup(memorySelectionButtons);
 		gbButton.setToggleGroup(memorySelectionButtons);
 		tbButton.setToggleGroup(memorySelectionButtons);
+		
+		memorySelectionButtons.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+		        @Override
+		        public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
+		        	SelectedButton = (RadioButton)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
+		        }
+		    });
+		
 		/*Add Buttons to GridPane*/
 		sizeGPane = new GridPane();
 		sizeGPane.setPadding(new Insets(10,0,0,0));
@@ -181,11 +203,15 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		sizeGPane.add(tbButton, 0, 1);
 		sizeGPane.setHgap(5);
 		sizeGPane.setVgap(5);
-		sizeTField = new TextField();
+		sizeTField = new NumberTextField();
 		sizeTField.prefWidthProperty().bind(sizeGPane.widthProperty());
 		sizeVBox = new VBox();
 		/*Label Used to tell user if the value they entered in the tb is>1TB*/
-		sizeTOBIG = new Label("File size is greater then 1TB!");
+		sizeTOBIG = new Label("File size is greater then "+ userdefinedlimit + userdefinedlimitsize + "!");
+		if(safemodeenabled)
+		{
+			sizeTOBIG.setText("File size is greater then " + safemodelimit+"GB!");
+		}
 		sizeTOBIG.setTextFill(Color.web("#ff0000"));
 		sizeTOBIG.setVisible(false);
 		sizeVBox.getChildren().add(sizeTField);
@@ -194,37 +220,37 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		sizetp = new TitledPane("Size Options",sizeVBox);
 		sizetp.setCollapsible(false);
 	}
-	
+
 	private void initexpanderButtons()
 	{
 		expandBGPane = new GridPane();
-		
+
 		expandAll = new Button("Expand All");
 		expandAll.setOnAction(this);
-		
+
 		expandSelected = new Button("Expand Selected");
 		expandSelected.setOnAction(this);
-		
+
 		Cancel = new Button("Cancel");
 		Cancel.setOnAction(this);
-		
+
 		expandAll.minWidthProperty().bind(expandBGPane.widthProperty());
 		expandSelected.minWidthProperty().bind(expandBGPane.widthProperty());
 		Cancel.minWidthProperty().bind(expandBGPane.widthProperty());
-		
-		
+
+
 		expandBGPane.add(expandAll, 0, 0);
 		expandBGPane.add(expandSelected, 0, 1);
 		expandBGPane.add(Cancel, 0, 2);
 		expandBGPane.setVgap(10);
 		expandBGPane.setAlignment(Pos.CENTER_RIGHT);
-		
+
 	}
-	
+
 	public static Stage getExpanderStage() {
 		return expanderStage;
 	}
-	
+
 
 	@Override
 	public void handle(ActionEvent e) {
@@ -237,20 +263,76 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		{
 			expandAllButtonHandler();
 		}
-		
+
 		if(source.equals(expandSelected))
 		{
+			getsize();
 			expandSelectedButtonHandler();
 		}
-		
+
 		if(source.equals(Cancel))
 		{
 			expanderStage.close();
 		}
+
+
+	}
+
+	/*returns size in megabytes*/
+	private double getsize()
+	{
+		if(sizeTField.getText().isEmpty())
+		{
+			showError("No Size Entered");
+			return 0;
+		}
+		if(SelectedButton==null)
+		{
+			showError("No Size Selected");
+			return 0;
+		}
+		sizeTOBIG.setVisible(false);
+		double megabytes = 0;
+		double gigabytes = 0;
+		double terabytes = 0;
+		if(SelectedButton.equals(mbButton))
+		{
+			megabytes = Integer.valueOf(sizeTField.getText());
+			gigabytes = (megabytes/1024);
+			terabytes = (gigabytes/1024);
+		}
+		else if(SelectedButton.equals(gbButton))
+		{
+			gigabytes = Integer.valueOf(sizeTField.getText());
+			megabytes = (gigabytes*1024);
+			terabytes = (gigabytes/1024);
+		}
+		else if(SelectedButton.equals(tbButton))
+		{
+			terabytes = Integer.valueOf(sizeTField.getText());
+			gigabytes = (terabytes*1024);
+			megabytes = (gigabytes*1024);
+		}
 		
-		
+		if(terabytes>1 || ((safemodeenabled)&&(gigabytes>safemodelimit)))
+		{
+			sizeTOBIG.setVisible(true);
+			return 0;
+		}
+		//value in megabytes
+		return megabytes;
 	}
 	
+	private void showError(String error)
+	{
+		Alert alert = new Alert(AlertType.ERROR, error, ButtonType.OK);
+		alert.setGraphic(null);
+		alert.showAndWait();
+		if (alert.getResult() == ButtonType.OK) {
+		    alert.close();
+		}
+	}
+
 	private void expandAllButtonHandler()
 	{
 		Expander e = GUI.getExpander();
@@ -258,10 +340,20 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		{
 			return;
 		}
+		long allfiles_size = 0;
+		for(File f:e.getFiles())
+		{
+			allfiles_size+=((f.length()/1024)/1024);
+		}
+		if(allfiles_size>=getsize())
+		{
+			showError("Minimum size of " + (allfiles_size+1)+"mb required to expand these files");
+			return;
+		}
 		expanderStage.close();
 		e.run();
 	}
-	
+
 	private void expandSelectedButtonHandler()
 	{
 		Expander e = GUI.getExpander();
@@ -281,7 +373,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		expanderStage.close();
 		e.run();
 	}
-	
+
 	private void browseButtonHandler()
 	{
 		FileChooser fileChooser = new FileChooser();
@@ -310,10 +402,10 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			return;
 		}
 		ExpanderGUI.getExpanderStage().focusedProperty().addListener(focusListener);
-		
+
 	}
-	
-	
+
+
 	/*Restore items from list*/
 	public void restorefilesList()
 	{
@@ -322,7 +414,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			filesList.add(s);
 		}
 	}
-	
+
 	/*Remove items from list*/
 	public void  remove_files(ArrayList<String> indexs)
 	{
