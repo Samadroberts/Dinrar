@@ -25,9 +25,4 @@ public class Deflater extends FileFunctions {
 		
 	}
 
-	@Override
-	public void initwrite() {
-		// TODO Auto-generated method stub
-		
-	}
 }

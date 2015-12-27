@@ -37,15 +37,17 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.File;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 import FileExpander.Deflater;
 import FileExpander.Expander;
 import FileExpander.FileFunctions;
 import GUI.GUI;
 
-public class ExpanderGUI implements EventHandler<ActionEvent> {
+public class ExpanderGUI extends Observable implements EventHandler<ActionEvent> {
 
 	//Insets(top/right/bottom/left)
 
@@ -86,6 +88,9 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 
 	private boolean isExpander = false;
 	private boolean isDelfater = false;
+	
+	
+	private BigInteger allfiles_size = new BigInteger("0");
 
 	private ObservableList<String> filesList;
 
@@ -135,6 +140,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			mainVBox.getChildren().add(expanderGPane);
 
 		}
+		super.addObserver(GUI.getExpander());
 		mainVBox.setPadding(new Insets(10,10,10,10));
 	}
 
@@ -266,7 +272,6 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 
 		if(source.equals(expandSelected))
 		{
-			getsize();
 			expandSelectedButtonHandler();
 		}
 
@@ -279,7 +284,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 	}
 
 	/*returns size in megabytes*/
-	private double getsize()
+	public long getsize()
 	{
 		if(sizeTField.getText().isEmpty())
 		{
@@ -292,9 +297,9 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			return 0;
 		}
 		sizeTOBIG.setVisible(false);
-		double megabytes = 0;
-		double gigabytes = 0;
-		double terabytes = 0;
+		long megabytes = 0;
+		long gigabytes = 0;
+		long terabytes = 0;
 		if(SelectedButton.equals(mbButton))
 		{
 			megabytes = Integer.valueOf(sizeTField.getText());
@@ -338,19 +343,25 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		Expander e = GUI.getExpander();
 		if(e.getFiles().size()==0)
 		{
+			showError("No file(s) to expand");
 			return;
 		}
-		long allfiles_size = 0;
+
 		for(File f:e.getFiles())
 		{
-			allfiles_size+=((f.length()/1024)/1024);
+			//bytes to kb to mb
+			allfiles_size = allfiles_size.add(new BigInteger((String.valueOf((f.length())))));
 		}
-		if(allfiles_size>=getsize())
+		//getsize() returns in mb
+		if(allfiles_size.longValue()>=(getsize()*1024*1024))
 		{
-			showError("Minimum size of " + (allfiles_size+1)+"mb required to expand these files");
+			showError("Minimum size of " + ((allfiles_size.longValue()/1024/1024)+1)+"mb required to expand these files");
+			allfiles_size = new BigInteger("0");
 			return;
 		}
 		expanderStage.close();
+		super.setChanged();
+		super.notifyObservers();
 		e.run();
 	}
 
@@ -359,6 +370,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		Expander e = GUI.getExpander();
 		if(SelectedListener.getIndexs().size()==0)
 		{
+			showError("No file(s) seleted to expand");
 			return;
 		}
 		ArrayList<File> toremove = new ArrayList<File>();
@@ -370,8 +382,7 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 			}
 		}
 		e.removeFiles(toremove);
-		expanderStage.close();
-		e.run();
+		expandAllButtonHandler();
 	}
 
 	private void browseButtonHandler()
@@ -422,6 +433,11 @@ public class ExpanderGUI implements EventHandler<ActionEvent> {
 		{
 			filesList.remove(s);
 		}
+	}
+	
+	public BigInteger getallfiles_size()
+	{
+		return this.allfiles_size;
 	}
 
 }

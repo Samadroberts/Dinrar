@@ -13,7 +13,7 @@ public class GUI extends Application {
 	
 	private final static String APPNAME = "Dinrar";
 	private final static String[] APPDESC = {"Bigger is Always Better","Computer Load Up Celery Man","Beep Boop Computer Please",
-			"Winrar Winrar Chicken Dinrar","\""+"Nude Tayne"+"\""};
+			"Winrar Winrar Chicken Dinrar","\""+"Nude Tayne"+"\"","Proven to Cause Cancer","Hitler did Nothing Wrong"};
 	
 	public final static double DEFAULT_WIDTH = 900;
 	public final static double DEFAULT_HEIGHT = 700;
@@ -23,6 +23,7 @@ public class GUI extends Application {
 
 	
 	private Scene primaryscene;
+	private Stage primarystage;
 	private static Expander E;
 	private static Deflater D;
 	private static BinaryFiller bf;
@@ -37,6 +38,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primarystage)
 	{
+		this.primarystage = primarystage;
 		this.primaryscene = new mainScene(primarystage);
 		/*Initializes BinaryFiller AnimationTimer*/
 		this.initBinaryFiller();

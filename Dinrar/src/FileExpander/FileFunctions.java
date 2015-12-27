@@ -1,29 +1,38 @@
 package FileExpander;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.math.BigInteger;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 
-public abstract class FileFunctions implements Runnable {
+public abstract class FileFunctions extends Thread {
 	
 	private File cur_file;
-	private BigInteger cur_file_size;
 	HashMap<File,Integer> filemap;
 	private byte[] filedata;
 	
-	protected static final long MEGABYTE = 1000000;
-	protected static final long GIGABYTE = 1000000000;
-	protected static final BigInteger TERABYTE = new BigInteger("1000000000000");
-	private static final int BYTES_TO_READ = 3096; //leaves 1000 characters to be written assuming each character is 1 byte
+	
+
+	protected static final int BYTES_TO_READ_DEFAULT = 8192;//Some website said 8kb was most efficient read value lol
+	/*Min size a file needs to be to get default read size else the file is read in increments of 1/20 with the last read being 1/20+remainder*/
+	protected static final int MIN_DEFAULT_READ_FILE_SIZE = 163840;
+	protected static final int FILE_DIV_RATIO = 20;
 	private static final int MAX_BYTES_TO_WRITE = 4096;
+	protected boolean appendfirstfile = true;
+	
+	/*Change*/
+	private static final String TEMPFNAME = "test.dinrar";
 	
 	
 	public FileFunctions()
@@ -46,51 +55,66 @@ public abstract class FileFunctions implements Runnable {
 		printfiles();
 	}
 	
+	/*Gets the number of bytes that will be read given a file size
+	 * if the file is less then MIN_DEFAULT_READ_FILE_SIZE then the function
+	 * returns a value which will result in 20-21 reads depending on if the size
+	 * of the file can be divided evenly by 20*/
 	
-	public BigInteger getCur_file_size() {
-		return cur_file_size;
-	}
-
-	/*Get all the file info in an array of bytes*/
-	public void getFileBytes()
+	protected int calculate_bytes_per_read(File f)
 	{
-		RandomAccessFile filereader = null;
-		byte[] Fileinfo = null;
-		
-		try {
-			/*Set to read only*/
-			filereader = new RandomAccessFile(this.cur_file,"r");
-		} catch (FileNotFoundException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
+		if(f.length()<MIN_DEFAULT_READ_FILE_SIZE)
+		{
+			return ((int)f.length())/FILE_DIV_RATIO;
 		}
-		Fileinfo = new byte[BYTES_TO_READ];
-		try {
-			{
-				cur_file_size = new BigInteger((String.valueOf(this.getCur_file().length())));
-				initwrite();
-			}
-			while(filereader.read(Fileinfo)!=-1)
-			{
-				write(this.getCur_file(),Fileinfo,true);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println("Done");
+		return BYTES_TO_READ_DEFAULT;
 	}
+	
+	/*This function determine the number of file reads that will occur based on the amount
+	 * of bytes that was calculated to be read in the function calculate_bytes_per_read()*/
+	protected int calculate_number_of_reads(File f)
+	{
+		int rval;
+		int fsize = (int)f.length();
+		if(fsize<MIN_DEFAULT_READ_FILE_SIZE)
+		{
+			rval = FILE_DIV_RATIO;
+			if(fsize%FILE_DIV_RATIO>0)
+			{
+				rval++;
+			}
+			return rval;
+		}
+		int bytes_per_read = calculate_bytes_per_read(f);
+		rval = fsize/bytes_per_read;
+		if(fsize%bytes_per_read>0)
+		{
+			rval++;
+		}
+		return rval;
+	}
+	/*This function determines how many bytes of the calculated bytes to be added for the given
+	 * file will be added per write*/
+	protected long calculate_bytes_per_write(long num_of_bytes_to_write,int num_reads)
+	{
+		return num_of_bytes_to_write/num_reads;
+	}
+	/*Returns the remainder which will need to be added for the last write of random data*/
+	protected long calculate_remainder_bytes_for_last_write(long num_of_bytes_to_write,int num_reads)
+	{
+		return num_of_bytes_to_write%num_reads;
+	}
+	
+	
 	
 	public abstract void modify_bytes(byte[] data);
-	public abstract void initwrite();
 	
 	public int write(File f,byte[] data,boolean append)
 	{
 		
-		try (FileOutputStream output = new FileOutputStream("test.dinrar", append)) {
+		try (
+			FileOutputStream output = new FileOutputStream(TEMPFNAME, append)) {
 			DataOutputStream dos = new DataOutputStream(output);
 			dos.write(data);
-			System.out.println("Size: "+dos.size());
 			return dos.size();
 		}
 		catch (FileNotFoundException e) {
@@ -102,6 +126,25 @@ public abstract class FileFunctions implements Runnable {
 		}
 		return 0;
 	}
+	
+	public int write(File f,ByteBuffer b,boolean append)
+	{
+		try (
+				FileOutputStream output = new FileOutputStream(TEMPFNAME, append)) {
+				FileChannel channel = output.getChannel();
+				return channel.write(b);
+			}
+			catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return 0;
+		
+	}
+	
 	
 	
 	public File getCur_file() {
