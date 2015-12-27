@@ -14,12 +14,6 @@ public class Deflater extends FileFunctions {
 	}
 
 	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void modify_bytes(byte[] data) {
 		// TODO Auto-generated method stub
 		

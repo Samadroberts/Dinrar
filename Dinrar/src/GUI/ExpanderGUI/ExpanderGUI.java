@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableArrayBase;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -62,7 +63,7 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 	private boolean safemodeenabled = false;
 	private static final int DEFAULT_SAFE_MODE_LIMIT = 25; //GB
 	private int safemodelimit = DEFAULT_SAFE_MODE_LIMIT;
-	
+
 	private static final int DEFAULT_USER_DEFINED_LIMIT = 1;
 	private int userdefinedlimit = DEFAULT_USER_DEFINED_LIMIT;
 	private static final String DEFAULT_USER_DEFINED_LIMIT_STRING = "TB";
@@ -88,8 +89,8 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 
 	private boolean isExpander = false;
 	private boolean isDelfater = false;
-	
-	
+
+
 	private BigInteger allfiles_size = new BigInteger("0");
 
 	private ObservableList<String> filesList;
@@ -193,14 +194,14 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 		mbButton.setToggleGroup(memorySelectionButtons);
 		gbButton.setToggleGroup(memorySelectionButtons);
 		tbButton.setToggleGroup(memorySelectionButtons);
-		
+
 		memorySelectionButtons.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-		        @Override
-		        public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
-		        	SelectedButton = (RadioButton)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
-		        }
-		    });
-		
+			@Override
+			public void changed(ObservableValue<? extends Toggle> ov, Toggle t, Toggle t1) {
+				SelectedButton = (RadioButton)t1.getToggleGroup().getSelectedToggle(); // Cast object to radio button
+			}
+		});
+
 		/*Add Buttons to GridPane*/
 		sizeGPane = new GridPane();
 		sizeGPane.setPadding(new Insets(10,0,0,0));
@@ -318,7 +319,7 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			gigabytes = (terabytes*1024);
 			megabytes = (gigabytes*1024);
 		}
-		
+
 		if(terabytes>1 || ((safemodeenabled)&&(gigabytes>safemodelimit)))
 		{
 			sizeTOBIG.setVisible(true);
@@ -327,14 +328,14 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 		//value in megabytes
 		return megabytes;
 	}
-	
+
 	private void showError(String error)
 	{
 		Alert alert = new Alert(AlertType.ERROR, error, ButtonType.OK);
 		alert.setGraphic(null);
 		alert.showAndWait();
 		if (alert.getResult() == ButtonType.OK) {
-		    alert.close();
+			alert.close();
 		}
 	}
 
@@ -360,9 +361,20 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			return;
 		}
 		expanderStage.close();
+		/*updates the expander on the total_bytes which will be written to the file*/
 		super.setChanged();
 		super.notifyObservers();
-		e.run();
+
+		/*Used to run the expander and start the binary filler animation*/
+		Task<Void> task = new Task<Void>() {
+			@Override public Void call() {
+				GUI.getBinaryFiller().start();
+				e.runExpander();
+				GUI.getBinaryFiller().stop();
+				return null;
+			}
+		};
+		new Thread(task).start();
 	}
 
 	private void expandSelectedButtonHandler()
@@ -434,7 +446,7 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			filesList.remove(s);
 		}
 	}
-	
+
 	public BigInteger getallfiles_size()
 	{
 		return this.allfiles_size;

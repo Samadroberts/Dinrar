@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javafx.concurrent.Task;
 
-public abstract class FileFunctions extends Thread {
+
+public abstract class FileFunctions {
 	
 	private File cur_file;
 	HashMap<File,Integer> filemap;
@@ -201,6 +203,5 @@ public abstract class FileFunctions extends Thread {
 		System.out.println(s);
 	}
 	
-	public abstract void run();
 
 }

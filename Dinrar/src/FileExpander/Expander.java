@@ -39,9 +39,8 @@ public class Expander extends FileFunctions implements Observer {
 		super();
 	}
 
-	@Override
-	public void run() {
-		GUI.getBinaryFiller().start();
+	public void runExpander() {
+		
 		appendfirstfile = false;
 		calculate_bytes_to_add();
 		calculate_bytes_per_file();
