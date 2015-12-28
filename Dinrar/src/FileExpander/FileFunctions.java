@@ -34,9 +34,11 @@ public abstract class FileFunctions {
 	protected boolean appendfirstfile = true;
 	
 	/*Change*/
-	private static final String TEMPFNAME = "test.dinrar";
+	protected String outputFile = "";
 	
 	
+
+
 	public FileFunctions()
 	{
 		filemap = new HashMap<File,Integer>();
@@ -114,7 +116,7 @@ public abstract class FileFunctions {
 	{
 		
 		try (
-			FileOutputStream output = new FileOutputStream(TEMPFNAME, append)) {
+			FileOutputStream output = new FileOutputStream(outputFile, append)) {
 			DataOutputStream dos = new DataOutputStream(output);
 			dos.write(data);
 			return dos.size();
@@ -132,7 +134,7 @@ public abstract class FileFunctions {
 	public int write(File f,ByteBuffer b,boolean append)
 	{
 		try (
-				FileOutputStream output = new FileOutputStream(TEMPFNAME, append)) {
+				FileOutputStream output = new FileOutputStream(outputFile, append)) {
 				FileChannel channel = output.getChannel();
 				return channel.write(b);
 			}
@@ -188,6 +190,15 @@ public abstract class FileFunctions {
 	public void removeallFiles()
 	{
 		filemap.clear();
+	}
+	
+	public void setoutputpath(File path)
+	{
+		outputFile = path.getAbsolutePath().replace('\\', '/');
+	}
+	
+	public String getOutputFile() {
+		return outputFile;
 	}
 
 	

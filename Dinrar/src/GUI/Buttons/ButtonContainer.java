@@ -2,7 +2,7 @@ package GUI.Buttons;
 
 import FileExpander.Expander;
 import GUI.GUI;
-import GUI.ExpanderGUI.ExpanderGUI;
+import GUI.ExpanderGUI.FileFunctionsGUI;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -48,11 +48,11 @@ public class ButtonContainer extends HBox implements EventHandler<ActionEvent> {
 		
 		if(source.equals(Expand))
 		{
-			new ExpanderGUI(GUI.getExpander());
+			new FileFunctionsGUI(GUI.getExpander());
 		}
 		if(source.equals(Deflate))
 		{
-			new ExpanderGUI(GUI.getDeflater());
+			new FileFunctionsGUI(GUI.getDeflater());
 		}
 		if(source.equals(Corrupt))
 		{

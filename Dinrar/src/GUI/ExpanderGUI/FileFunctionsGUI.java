@@ -48,7 +48,7 @@ import FileExpander.Expander;
 import FileExpander.FileFunctions;
 import GUI.GUI;
 
-public class ExpanderGUI extends Observable implements EventHandler<ActionEvent> {
+public class FileFunctionsGUI extends Observable implements EventHandler<ActionEvent> {
 
 	//Insets(top/right/bottom/left)
 
@@ -86,6 +86,12 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 	private Button expandAll;
 	private Button expandSelected;
 	private Button Cancel;
+	
+	/*Output path GUI items*/
+	private TitledPane outputTPane;
+	private GridPane outputBox;
+	private TextField outputpathField;
+	private Button outputpathButton;
 
 	private boolean isExpander = false;
 	private boolean isDelfater = false;
@@ -97,18 +103,22 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 
 	private static final ExpanderFocusListener focusListener = new ExpanderFocusListener();
 
-	public ExpanderGUI(FileFunctions ff)
+
+
+	public FileFunctionsGUI(FileFunctions ff)
 	{
 		expanderStage = new Stage();
-		expanderStage.setWidth(GUI.DEFAULT_WIDTH*.4);
-		expanderStage.setHeight(GUI.DEFAULT_HEIGHT*.6);
 		if(ff instanceof Expander)
 		{
+			expanderStage.setWidth(GUI.DEFAULT_WIDTH*.4);
+			expanderStage.setHeight(GUI.DEFAULT_HEIGHT*.8);
 			expanderStage.setTitle("Choose Files to Expand");
 			isExpander=true;
 		}
 		if(ff instanceof Deflater)
 		{
+			expanderStage.setWidth(GUI.DEFAULT_WIDTH*.4);
+			expanderStage.setHeight(GUI.DEFAULT_HEIGHT*.7);
 			expanderStage.setTitle("Choose Files to Deflate");
 			isDelfater=true;
 		}
@@ -134,11 +144,13 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			expanderGPane.minWidthProperty().bind(mainContainer.widthProperty());
 			initRadioButtons();
 			initexpanderButtons();
+			initOutputPath();
 			expanderGPane.add(sizetp, 0, 0);
 			expanderGPane.add(expandBGPane,1,0);
 			expanderGPane.setPadding(new Insets(10,0,0,0));
 			expanderGPane.setHgap(40);
 			mainVBox.getChildren().add(expanderGPane);
+			mainVBox.getChildren().add(outputTPane);
 
 		}
 		super.addObserver(GUI.getExpander());
@@ -253,6 +265,29 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 		expandBGPane.setAlignment(Pos.CENTER_RIGHT);
 
 	}
+	
+	private void initOutputPath()
+	{
+		outputBox = new GridPane();
+		outputBox.setHgap(10);
+		outputpathField = new TextField();
+		outputpathField.setEditable(false);
+		Text buttonText = new Text("Browse...");
+		outputpathButton = new Button(buttonText.getText());
+		outputpathButton.setMinWidth(buttonText.getLayoutBounds().getWidth());
+		outputpathButton.setPrefWidth(buttonText.getLayoutBounds().getWidth()+30);
+		outputpathButton.setOnAction(new outputButtonListener(GUI.getExpander(), outputpathField));
+		outputBox.add(outputpathButton, 1, 0);
+		outputBox.add(outputpathField, 0, 0);
+		ColumnConstraints column0 = new ColumnConstraints();
+		column0.setPercentWidth(75);
+		outputBox.getColumnConstraints().add(column0);
+		outputTPane = new TitledPane("Output Path",outputBox);
+		outputTPane.setCollapsible(false);
+		outputTPane.prefWidthProperty().bind(mainContainer.widthProperty());
+		outputTPane.setPadding(new Insets(10,0,0,0));
+		outputBox.prefWidthProperty().bind(outputTPane.widthProperty());
+	}
 
 	public static Stage getExpanderStage() {
 		return expanderStage;
@@ -347,6 +382,12 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			showError("No file(s) to expand");
 			return;
 		}
+		
+		if(e.getOutputFile()=="")
+		{
+			showError("No output path selected");
+			return;
+		}
 
 		for(File f:e.getFiles())
 		{
@@ -400,7 +441,7 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 	private void browseButtonHandler()
 	{
 		FileChooser fileChooser = new FileChooser();
-		ExpanderGUI.getExpanderStage().focusedProperty().removeListener(focusListener);
+		FileFunctionsGUI.getExpanderStage().focusedProperty().removeListener(focusListener);
 		fileChooser.setTitle("Open File to Expand");
 		Expander expander = GUI.getExpander();
 		/*If the action is cancel theses are used to restore*/
@@ -420,11 +461,10 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 			}
 		}catch(NullPointerException npe)
 		{
-			ExpanderGUI.getExpanderStage().focusedProperty().addListener(focusListener);
+			FileFunctionsGUI.getExpanderStage().focusedProperty().addListener(focusListener);
 			restorefilesList();
 			return;
 		}
-		ExpanderGUI.getExpanderStage().focusedProperty().addListener(focusListener);
 
 	}
 
@@ -445,6 +485,10 @@ public class ExpanderGUI extends Observable implements EventHandler<ActionEvent>
 		{
 			filesList.remove(s);
 		}
+	}
+	
+	public static ExpanderFocusListener getFocuslistener() {
+		return focusListener;
 	}
 
 	public BigInteger getallfiles_size()

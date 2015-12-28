@@ -9,10 +9,10 @@ import javafx.scene.input.KeyEvent;
 
 public class DeletedKeyListener implements EventHandler<KeyEvent> {
 	
-	private ExpanderGUI e;
+	private FileFunctionsGUI e;
 	private Expander expander = GUI.getExpander();
 	
-	public DeletedKeyListener(ExpanderGUI gui)
+	public DeletedKeyListener(FileFunctionsGUI gui)
 	{
 		this.e = gui;
 	}

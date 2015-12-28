@@ -10,7 +10,7 @@ public class ExpanderFocusListener implements ChangeListener<Boolean> {
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
-				ExpanderGUI.getExpanderStage().requestFocus();
+				FileFunctionsGUI.getExpanderStage().requestFocus();
 			}
 		});
 	}

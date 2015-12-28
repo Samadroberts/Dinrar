@@ -19,7 +19,7 @@ import java.util.Observer;
 import java.util.Random;
 
 import GUI.GUI;
-import GUI.ExpanderGUI.ExpanderGUI;
+import GUI.ExpanderGUI.FileFunctionsGUI;
 import sun.misc.IOUtils;
 
 public class Expander extends FileFunctions implements Observer {
@@ -181,6 +181,6 @@ public class Expander extends FileFunctions implements Observer {
 	@Override
 	public void update(Observable expandergui, Object arg1) {
 		/*Size in bytes*/
-		total_bytes_to_write = new BigInteger(String.valueOf(((ExpanderGUI)expandergui).getsize()*1024*1024));
+		total_bytes_to_write = new BigInteger(String.valueOf(((FileFunctionsGUI)expandergui).getsize()*1024*1024));
 	}
 }
